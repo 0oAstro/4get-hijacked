@@ -1,3 +1,4 @@
+import os
 import re
 from typing import Dict, Any, Optional
 from datetime import datetime
@@ -54,8 +55,9 @@ class FourgetHijackerClient:
 
 
     @staticmethod
-    def dispatch_request(engine_id: str, query: str, params: Dict[str, Any], base_url: str = "http://4get-hijacked:80") -> Dict[str, Any]:
+    def dispatch_request(engine_id: str, query: str, params: Dict[str, Any]) -> Dict[str, Any]:
         """ROUTE: Centralized request handler for all 4get hijacked engines."""
+        engine_id = engine_id.rsplit("/", 1)[-1]
         fourget_params = FourgetHijackerClient.get_4get_params(query, params, engine_name=engine_id)
 
         # HAZARD: SearXNG params might be dict or OnlineParams object. getattr() is safer here.
@@ -74,7 +76,7 @@ class FourgetHijackerClient:
 
 
         params.update({
-            'url': base_url.rstrip('/') + '/harness.php',
+            'url': os.environ.get('FOURGET_URL', 'http://4get-hijacked:80').rstrip('/') + '/harness.php',
             'method': 'POST',
             'json': {
                 'engine': engine_id,

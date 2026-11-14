@@ -47,15 +47,15 @@ docker compose up -d
 
 ## Native deployments
 
-Each SearXNG engine accepts a `fourget_url` setting. The default is
+Set the SearXNG process environment variable `FOURGET_URL` to the native
+sidecar's base URL, for example `http://127.0.0.1:18088`. It defaults to
 `http://4get-hijacked:80`, preserving the Docker Compose deployment. A native
-loopback deployment can use:
+deployment can load the original engine wrappers directly:
 
 ```yaml
 engines:
   - name: brave4
     engine: /path/to/4get-hijacked/searx/engines/brave-4get
-    fourget_url: http://127.0.0.1:18088
     enable_http: true
     timeout: 3.0
 ```
